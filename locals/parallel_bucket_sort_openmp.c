@@ -1,7 +1,7 @@
 #include <omp.h>
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
+#include <stdlib.h>
 #include <time.h>
 #include "randomlist.h"
 
@@ -9,47 +9,53 @@
 struct bucket {
     int n_elem;
     int index; // [start : n_elem)
-    int start; // starting point in B array
+    int start; //starting point in B array
 };
 
-int cmpfunc(const void *a, const void *b) {
-    return (*(int *)a - *(int *)b);
+int cmpfunc (const void * a, const void * b)
+{
+ return ( *(int*)a - *(int*)b );
 }
 
 int main(int argc, char *argv[]) {
-
+    // freeRandomList();
     int *B, *temp;
-    int n_buckets, i, w, num_threads, workload, b_index;
+    int n_buckets, i, w, limit, num_threads, workload, b_index;
     struct bucket* buckets; //array of buckets
     double t1; // Timing variable
     float total; //total time
-    n_buckets = 3;
-    int *tmp;
-    // dim = 100;
-    // limit = 1000;
-
+	int *tmp;
     //global buckets
+    n_buckets = 20;
     int global_n_elem[n_buckets]; //number of elements in each bucket
     int global_starting_position[n_buckets]; //starting position in A for each bucket
     memset(global_n_elem, 0, sizeof(int)*n_buckets);
     memset(global_starting_position, 0, sizeof(int)*n_buckets);
 
+    initializeRandomList(6000000);
     num_threads = n_buckets;
-    printf("number of threads %d \n", num_threads);
     omp_set_num_threads(num_threads);
-    initializeRandomList(10); // Inicializa a lista com 10 números aleatórios
 
-    for (int i = 0; i < dim; i++) {
-        printf("Unsorted data");
-        printf("%d\n", A[i]);
-    }
+    limit = 1000000;
+    w = limit/n_buckets;
+    B = (int *) malloc(sizeof(int)*dim);
+	
+	
+    // printf("Unsorted data \n");
+    // for(i=0;i<dim;i++) {
+    //     printf("%d ",A[i]);
+    // }
+    // printf("\n");
+    
 
-    // freeRandomList(); // Libera a memória alocada
-   
+    //local buckets, n_buckets for each thread
     buckets = (struct bucket *) calloc(n_buckets*num_threads, sizeof(struct bucket));
+
+// ****************************
+// Starting the main algorithm
+// ****************************
+
     t1 = omp_get_wtime();
-
-
 #pragma omp parallel
 {
     num_threads = omp_get_num_threads();
@@ -113,14 +119,14 @@ int main(int argc, char *argv[]) {
 	tmp = A;
 	A = B;
 	B = tmp;
-   printf("Sorting %d elements took %f seconds\n", dim);
-   
-    printf("A \n");
-    for(i=0;i<dim;i++) {
-        printf("%d ",A[i]);
+
+   if (dim <= 40) {
+        printf("A \n");
+        for(i=0;i<dim;i++) {
+            printf("%d ",A[i]);
+        }
+        printf("\n");
     }
-    printf("\n");
-    
     printf("Sorting %d elements took %f seconds\n", dim,total);
 
     int sorted = 1;

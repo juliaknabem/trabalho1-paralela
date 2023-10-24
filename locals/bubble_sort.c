@@ -13,7 +13,7 @@ int main()
       printf("%d\n", A[i]);
   }
 
-  freeRandomList();
+  // freeRandomList();
 // Algoritmo de ordenação Bubblesort:
  for (contador = 1; contador < dim; contador++) {
    for (i = 0; i < dim - 1; i++) {
