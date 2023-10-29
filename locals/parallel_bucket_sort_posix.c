@@ -4,10 +4,9 @@
 #include <time.h>
 #include "randomlist.h"
 
-//#define NARRAY 110000  // Array size
-#define NBUCKET 1000  // Number of buckets
-#define INTERVAL 10001  // Each bucket capacity
-#define NUM_THREADS 4
+#define NBUCKET 2  // Number of buckets
+#define INTERVAL 30  // Each bucket capacity
+#define NUM_THREADS 2
 
 struct Node
 {
@@ -172,13 +171,8 @@ void print(int arr[])
 
 int main(void)
 {
-    //int array[NARRAY];
-    initializeRandomList(100000);
 
-    /*for (int i = 0; i < NARRAY; i++)
-    {
-        array[i] = rand() % NARRAY + 1; // Gera um número aleatório
-    }*/
+    initializeRandomList(30);
 
     clock_t t0, t1;
     t0 = clock();
@@ -189,10 +183,10 @@ int main(void)
     double elapsed_time = (double)(t1 - t0) / CLOCKS_PER_SEC;
     printf("Time taken: %f seconds\n", elapsed_time);
 
-    // Imprimir os resultados ordenados
-    //printf("Sorted array: ");
-    //print(array);
-
+    printf("Sorted data \n");
+    for(int i=0;i<dim;i++) {
+        printf("%d ",A[i]);
+    }
 
     return 0;
 }
